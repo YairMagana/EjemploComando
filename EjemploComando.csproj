@@ -9,6 +9,21 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,9 +96,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comandos\AccionCaminar.cs" />
+    <Compile Include="Comandos\AccionDispararRifle.cs" />
+    <Compile Include="Comandos\AccionEquiparRifle.cs" />
     <Compile Include="Comandos\AccionDisparar.cs" />
-    <Compile Include="Comandos\AccionEquiparArma.cs" />
+    <Compile Include="Comandos\AccionSaltar.cs" />
+    <Compile Include="Comandos\AccionCaminar.cs" />
+    <Compile Include="Comandos\AccionDispararLanzagranadas.cs" />
+    <Compile Include="Comandos\AccionEquiparLanzagranadas.cs" />
     <Compile Include="Comandos\AccionGolpear.cs" />
     <Compile Include="Comandos\AdministradorAcciones.cs" />
     <Compile Include="Comandos\IAcciones.cs" />
@@ -96,6 +115,13 @@
     <Folder Include=".git\objects\info\" />
     <Folder Include=".git\objects\pack\" />
     <Folder Include=".git\refs\tags\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

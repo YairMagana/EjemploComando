@@ -10,57 +10,94 @@ namespace EjemploComando
         static void Main(string[] args)
         {
             Invocador invocador = new Invocador();
-            ReceiverPersonaje receiverPersonaje = new ReceiverPersonaje();
-
+            ReceiverPersonaje personaje = null;
             AdministradorAcciones administradorAcciones;
 
-            IAcciones accionDisparar = new AccionDisparar(receiverPersonaje);
+            string menuJuego;
 
-            string k;
-            string menu;
+            ConsoleKeyInfo k1;
+            ConsoleKeyInfo k2;
 
             do
             {
                 Console.WriteLine("-- MENÚ --\n\nA. Jugar  X. Salir");
 
-                k = Console.ReadLine();
-                if (k.ToUpper() == "A")
+                k1 = Console.ReadKey();
+                if (k1.Key == ConsoleKey.A)
                 {
-                    k = string.Empty;
-                    Console.Clear();
-                    administradorAcciones = IniciarPersonaje(receiverPersonaje);
-                    do
+
+                    personaje = SeleccionarTipoPersonaje();
+
+                    if (personaje != null)
                     {
-                        menu = GenrarMenuAcciones(administradorAcciones.dicAcciones);
-                        Console.WriteLine(menu);
-                        k = Console.ReadLine();
 
-                        IAcciones accion = administradorAcciones.ObtenerAccion(k);
-                        if (accion != null)
+                        Console.Clear();
+                        administradorAcciones = IniciarPersonaje(personaje);
+
+                        do
                         {
-                            invocador.EstablecerComando(accion);
-                            invocador.EjecutarAccion();
+                            menuJuego = GenerarMenuAcciones(administradorAcciones.dicAcciones);
+                            Console.WriteLine(menuJuego);
+                            k2 = Console.ReadKey();
 
-                            if (accion == administradorAcciones.ObtenerAccion("W"))
+                            IAcciones accion = administradorAcciones.ObtenerAccion(k2.KeyChar.ToString());
+                            if (accion != null)
                             {
-                                administradorAcciones.AgegarComando(new string[] { "D", "Disparar" }, accionDisparar);
-                                administradorAcciones.RemoverComando("W");
+                                // ** Ejecución de comandos normales
+                                invocador.EstablecerComando(accion);
+                                invocador.EjecutarAccion();
+
+                                // ** Detección de comandos Especiales
+                                if (accion == administradorAcciones.ObtenerAccion("1"))
+                                {
+                                    administradorAcciones.AgegarComando(new string[] { "Q", "Disparar Lanzagranadas" }, new AccionDispararLanzagranadas(personaje));
+                                    administradorAcciones.RemoverComando("1");
+                                }
+                                if (accion == administradorAcciones.ObtenerAccion("2"))
+                                {
+                                    administradorAcciones.AgegarComando(new string[] { "W", "Disparar Rifle de Plasma" }, new AccionDispararRifle(personaje));
+                                    administradorAcciones.RemoverComando("2");
+                                }
                             }
-                        }
-                        else
-                        {
-                            Console.WriteLine("...\n");
-                        }
+                            else
+                            {
+                                Console.WriteLine("...\n");
+                            }
 
-                    } while (k.ToUpper() != "X");
-
-                    k = string.Empty;
+                        } while (k2.Key != ConsoleKey.X);
+                        Console.Clear();
+                    }
                     Console.Clear();
                 }
-            } while (k.ToUpper() != "X");
+            } while (k1.Key != ConsoleKey.X);
         }
 
-        public static string GenrarMenuAcciones(Dictionary<string[], IAcciones> dicAcciones)
+        public static ReceiverPersonaje SeleccionarTipoPersonaje()
+        {
+            ReceiverPersonaje personaje = null;
+            ConsoleKeyInfo k;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Seleccionar Tipo de Personaje:\n\tA. Guerrero Nivel 10\n\tB. Guerrero Nivel 20\n\tC. Guerrero Nivel 30\n\tX. Regresar");
+                k = Console.ReadKey();
+                switch (k.Key)
+                {
+                    case ConsoleKey.A:
+                        personaje = new ReceiverPersonaje(10);
+                        break;
+                    case ConsoleKey.B:
+                        personaje = new ReceiverPersonaje(20);
+                        break;
+                    case ConsoleKey.C:
+                        personaje = new ReceiverPersonaje(30);
+                        break;
+                }
+            } while (k.Key != ConsoleKey.X && personaje == null);
+            return personaje;
+        }
+
+        public static string GenerarMenuAcciones(Dictionary<string[], IAcciones> dicAcciones)
         {
             string v = string.Empty;
             foreach (var e in dicAcciones)
@@ -77,12 +114,12 @@ namespace EjemploComando
             Dictionary<string[], IAcciones> dicAcciones = new Dictionary<string[], IAcciones>();
             AdministradorAcciones administradorAcciones = new AdministradorAcciones(dicAcciones);
 
-            IAcciones accionCaminar = new AccionCaminar(receiverPersonaje);
-            IAcciones accionGolpear = new AccionGolpear(receiverPersonaje);
-            IAcciones accionEquiparArma = new AccionEquiparArma(receiverPersonaje);
-            administradorAcciones.AgegarComando(new string[] { "A", "Caminar" }, accionCaminar);
-            administradorAcciones.AgegarComando(new string[] { "S", "Golpear" }, accionGolpear);
-            administradorAcciones.AgegarComando(new string[] { "W", "Equipar Arma" }, accionEquiparArma);
+            administradorAcciones.AgegarComando(new string[] { "A", "Caminar" }, new AccionCaminar(receiverPersonaje));
+            administradorAcciones.AgegarComando(new string[] { "S", "Saltar" }, new AccionSaltar(receiverPersonaje));
+            administradorAcciones.AgegarComando(new string[] { "D", "Golpear" }, new AccionGolpear(receiverPersonaje));
+            administradorAcciones.AgegarComando(new string[] { "F", "Disparar" }, new AccionDisparar(receiverPersonaje));
+            administradorAcciones.AgegarComando(new string[] { "1", "Conseguir Lanzagranadas" }, new AccionEquiparLanzagranadas(receiverPersonaje));
+            administradorAcciones.AgegarComando(new string[] { "2", "Conseguir Rifle de plasma" }, new AccionEquiparRifle(receiverPersonaje));
 
             return administradorAcciones;
         }

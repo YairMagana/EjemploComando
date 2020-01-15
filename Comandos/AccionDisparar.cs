@@ -11,7 +11,7 @@
 
         public void Ejecutar()
         {
-            receiverPersonaje.EjecutaAccion($"DISPARA\n");
+            receiverPersonaje.EjecutaAccion($"DISPARA PISTOLA\n");
         }
     }
 }

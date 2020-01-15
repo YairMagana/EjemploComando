@@ -1,17 +1,17 @@
 ﻿namespace EjemploComando
 {
-    public class AccionGolpear : IAcciones
+    public class AccionDispararRifle : IAcciones
     {
         private ReceiverPersonaje receiverPersonaje;
 
-        public AccionGolpear(ReceiverPersonaje receiver)
+        public AccionDispararRifle(ReceiverPersonaje receiver)
         {
             this.receiverPersonaje = receiver;
         }
 
         public void Ejecutar()
         {
-            receiverPersonaje.EjecutaAccion($"LANZA GOLPE ({receiverPersonaje.poder} DAÑO)\n");
+            receiverPersonaje.EjecutaAccion($"DISPARA RIFLE DE PLASMA\n");
         }
     }
 }
