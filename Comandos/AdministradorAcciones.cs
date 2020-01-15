@@ -5,7 +5,7 @@ namespace EjemploComando
 {
     public class AdministradorAcciones
     {
-        Dictionary<string[], IAcciones> dicAcciones;
+        public Dictionary<string[], IAcciones> dicAcciones;
 
         public AdministradorAcciones(Dictionary<string[], IAcciones> _dicAcciones)
         {

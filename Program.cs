@@ -12,17 +12,9 @@ namespace EjemploComando
             Invocador invocador = new Invocador();
             ReceiverPersonaje receiverPersonaje = new ReceiverPersonaje();
 
-            IAcciones accionCaminar = new AccionCaminar(receiverPersonaje);
-            IAcciones accionGolpear = new AccionGolpear(receiverPersonaje);
+            AdministradorAcciones administradorAcciones;
+
             IAcciones accionDisparar = new AccionDisparar(receiverPersonaje);
-            IAcciones accionEquiparArma = new AccionEquiparArma(receiverPersonaje);
-
-            Dictionary<string[], IAcciones> dicAcciones = new Dictionary<string[], IAcciones>();
-            AdministradorAcciones administradorAcciones = new AdministradorAcciones(dicAcciones);
-
-            administradorAcciones.AgegarComando(new string[] { "A", "Caminar" }, accionCaminar);
-            administradorAcciones.AgegarComando(new string[] { "S", "Golpear" }, accionGolpear);
-            administradorAcciones.AgegarComando(new string[] { "W", "Equipar Arma" }, accionEquiparArma);
 
             string k;
             string menu;
@@ -36,9 +28,10 @@ namespace EjemploComando
                 {
                     k = string.Empty;
                     Console.Clear();
+                    administradorAcciones = IniciarPersonaje(receiverPersonaje);
                     do
                     {
-                        menu = GenrarMenuAcciones(dicAcciones);
+                        menu = GenrarMenuAcciones(administradorAcciones.dicAcciones);
                         Console.WriteLine(menu);
                         k = Console.ReadLine();
 
@@ -48,7 +41,7 @@ namespace EjemploComando
                             invocador.EstablecerComando(accion);
                             invocador.EjecutarAccion();
 
-                            if (accion == accionEquiparArma)
+                            if (accion == administradorAcciones.ObtenerAccion("W"))
                             {
                                 administradorAcciones.AgegarComando(new string[] { "D", "Disparar" }, accionDisparar);
                                 administradorAcciones.RemoverComando("W");
@@ -77,6 +70,21 @@ namespace EjemploComando
             v += $"X: Salir  ";
 
             return v;
+        }
+
+        public static AdministradorAcciones IniciarPersonaje(ReceiverPersonaje receiverPersonaje)
+        {
+            Dictionary<string[], IAcciones> dicAcciones = new Dictionary<string[], IAcciones>();
+            AdministradorAcciones administradorAcciones = new AdministradorAcciones(dicAcciones);
+
+            IAcciones accionCaminar = new AccionCaminar(receiverPersonaje);
+            IAcciones accionGolpear = new AccionGolpear(receiverPersonaje);
+            IAcciones accionEquiparArma = new AccionEquiparArma(receiverPersonaje);
+            administradorAcciones.AgegarComando(new string[] { "A", "Caminar" }, accionCaminar);
+            administradorAcciones.AgegarComando(new string[] { "S", "Golpear" }, accionGolpear);
+            administradorAcciones.AgegarComando(new string[] { "W", "Equipar Arma" }, accionEquiparArma);
+
+            return administradorAcciones;
         }
     }
 }
